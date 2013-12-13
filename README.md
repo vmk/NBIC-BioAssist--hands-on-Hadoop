@@ -3,7 +3,7 @@ NBIC-BioAssist: Hands-on Hadoop
 Welcome to the BioAssist Hands-on Hadoop workshop. This session has two objectives:
 
 * Try out/get to know SURFsara's Hadoop offerings and implement some basic code.
-* Implement a bioinformatics proble.
+* Tackle a bioinformatics problem using Hadoop.
 
 Hadoop access: Setting up your environment
 ------------------------------------------
@@ -24,8 +24,7 @@ In order to use the image you will need to import it into VirtualBox:
 
 The image has been configured with a single user:
 
-username: user 
-
+username: user
 password: hadoop
 
 By default hadoop is configured to connect to the hadoop environment on the localhost. In order to switch to cluster usage 
@@ -67,15 +66,29 @@ You submit a job to the MapReduce framework using the 'hadoop jar' command. You 
 2.	Run the WordCount example on the input file you uploaded before. Use 'mapreduce/output/wc-example' as the output path.
 3.	Look at the output generated, especially the Counters of the MapReduce Framework.
 4.	Inspect the output of the program. The results of the reducer(s) are stored in the 'part-N' files. An easy way to look at the output is 'hadoop fs -cat mapreduce/output/wc-example/part-* | less'.
-5.	Upload the file 'alice.txt' as 'mapreduce/input/large.txt' and also run the WordCount program in this input file.
 
 When you run the example again with the same output path Hadoop will refuse to run the job. Remove the output path with 'hadoop fs -rmr' or specify a different one. You can check the
 status of the jobs by pointing your browser to the jobtracker (the browser in the VM contains some bookmarks).
 
-
-
 Time to code: Kmer counting
 ---------------------------
+Code for this practical is available on github. Clone the repository to get all the projects:
+
+'git clone https://github.com/vmk/NBIC-BioAssist--hands-on-Hadoop'
+
+The repository contains two sections:
+
+	1. part1 - some example wordcount code as inspiration for part2
+		* wordcount_mr - wordcount using the mapreduce api
+		* wordcount_cascading - wordcount using the cascading api
+		* wordcount_pig - wordcount using pig
+	2. part2 - skeleton code to be implemented
+		* kmers_cascading - implement base counting and kmer counting in cascading here
+		* kmers_mr - implement base counting and kmer counting using mapreduce here
+		* kmers_pig - and example kmer counting using pig and a user defined function
+		* biopig - the biopig package for you to experiment with
+	
+
 
 Above and beyond: Doing something interesting
 ---------------------------------------------
