@@ -5,6 +5,12 @@ Welcome to the BioAssist Hands-on Hadoop workshop. This session has two objectiv
 * Try out/get to know SURFsara's Hadoop offerings and implement some basic code.
 * Tackle a bioinformatics problem using Hadoop.
 
+Some handy references to have open:
+
+* Hadoop tutorial: [http://developer.yahoo.com/hadoop/tutorial/index.html](http://developer.yahoo.com/hadoop/tutorial/index.html)
+* Cascading documentation: [http://www.cascading.org/documentation/](http://www.cascading.org/documentation/)
+* Pig documentation: [http://pig.apache.org/docs/r0.11.1/](http://pig.apache.org/docs/r0.11.1/)
+
 Hadoop access and first job
 ===========================
 
@@ -137,7 +143,7 @@ on your local VM. Once you are satisfied you can switch to the cluster and run i
 to use the splittable version for large runs (or you will be stuck with a single mapper per file which will take quite long). In order to verify your results we implemented a kmer count 
 in pig . You can run it from the kmers_pig folder by issuing the command:
 
-pig -f kmer.pig -param input=<hdfs path>
+	pig -f kmer.pig -param input=/hdfs/path
 
 The kmercounts will be printed to stdout (perhaps best to not do this on the full human data..)
 
@@ -148,7 +154,7 @@ Having implemented a basic kmercounter we can move on and analyze the sequences 
 1. Try and reproduce the results here [http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/). The human reads on the cluster
 are from subject HG02057 from the 1000 genomes project.
 2. Try to estimate genome size for both e. coli and the human data. 
-3. Play around with biopig - biopig is provide with the code. Please see:
+3. Play around with biopig - biopig can be cloned from github and has some great examples. Please see:
 
 	[https://github.com/JGI-Bioinformatics/biopig](https://github.com/JGI-Bioinformatics/biopig) 
 	[http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528](http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528).
