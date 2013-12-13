@@ -143,12 +143,14 @@ The kmercounts will be printed to stdout (perhaps best to not do this on the ful
 
 Above and beyond: Doing something interesting
 =============================================
-Having implemented a basic kmercounter we can move and analyze the sequences in more detail. Here are some things you could try (this will probably require additional map and reduce steps for you to implement/or more pipes in cascading):
+Having implemented a basic kmercounter we can move on and analyze the sequences in more detail. Here are some things you could try (this will probably require additional map and reduce steps for you to implement/or more pipes in cascading):
 
-1. try and reproduce the results here [http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/). The human reads on the cluster
+1. Try and reproduce the results here [http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/). The human reads on the cluster
 are from subject HG02057 from the 1000 genomes project.
-2. try to estimate genome size for both e. coli and the human data. 
-3. Play around with biopig - biopig is provide with the code. Please see [https://github.com/JGI-Bioinformatics/biopig](https://github.com/JGI-Bioinformatics/biopig) and [http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528](http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528).
+2. Try to estimate genome size for both e. coli and the human data. 
+3. Play around with biopig - biopig is provide with the code. Please see 
+	[https://github.com/JGI-Bioinformatics/biopig](https://github.com/JGI-Bioinformatics/biopig) 
+	[http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528](http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528).
 
 --------------------
 Both 1 and 2 will require you to further add code to count how many kmer matches exist genomewide (i.e. bin kmers who exist once and count these; bin k-mers with frequency 2 and count these etc.) - a good reference that explains this (and a good blog overall):
@@ -163,7 +165,7 @@ L - k + 1 gives you the number of kmers created per read.
 
 So basically what the formula says is the kmer coverage for a genome is equal to the mean read coverage * the number of kmers per read divided by the read length.
 
-Because you know L (your mean read length) and k (the kmer you used to estimate peak kmer coverage) and you've calculated M (soapdenovo comes with a script called kmerfreq that will this), you simply solve the equation for N as:
+Because you know L (your mean read length) and k (the kmer you used to estimate peak kmer coverage) and you've calculated M, you simply solve the equation for N as:
 
 N = M / (( L - k + 1 )/ L ) and calculate N.
 
