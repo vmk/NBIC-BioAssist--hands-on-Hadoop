@@ -148,7 +148,8 @@ Having implemented a basic kmercounter we can move on and analyze the sequences 
 1. Try and reproduce the results here [http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/). The human reads on the cluster
 are from subject HG02057 from the 1000 genomes project.
 2. Try to estimate genome size for both e. coli and the human data. 
-3. Play around with biopig - biopig is provide with the code. Please see 
+3. Play around with biopig - biopig is provide with the code. Please see
+
 	[https://github.com/JGI-Bioinformatics/biopig](https://github.com/JGI-Bioinformatics/biopig) 
 	[http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528](http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528).
 
