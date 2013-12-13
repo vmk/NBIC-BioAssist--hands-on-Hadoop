@@ -5,8 +5,8 @@ Welcome to the BioAssist Hands-on Hadoop workshop. This session has two objectiv
 * Try out/get to know SURFsara's Hadoop offerings and implement some basic code.
 * Tackle a bioinformatics problem using Hadoop.
 
-Hadoop access: Setting up your environment
-------------------------------------------
+Hadoop access and intro: Setting up your environment and running an existing job
+================================================================================
 
 Before being able to implement and run or debug any code, we need to get access to a Hadoop environment. For this workshop
 we will make use of a virtual machine that is configured both for a standalone Hadoop environment and the SURFsara cluster.
@@ -20,7 +20,8 @@ In order to use the image you will need to import it into VirtualBox:
 1. Start VirtualBox and select `File -> Import Appliance...`.
 2. Select the `hadoop-vm.ova` image from the download location.
 3. Continue and import the image. This will take around one to two minutes.
-4. Once the image has been imported start the virtual machine by selecting it and clicking the start icon. Hit enter at the Grub boot menu to start the os (or wait for the timeout).
+4. Once it is imported check the setting for memory - setting it to one to two gigabytes of memory will be better for this session.
+5. Once the image has been imported start the virtual machine by selecting it and clicking the start icon. Hit enter at the Grub boot menu to start the os (or wait for the timeout).
 
 The image has been configured with a single user:
 
@@ -71,7 +72,7 @@ When you run the example again with the same output path Hadoop will refuse to r
 status of the jobs by pointing your browser to the jobtracker (the browser in the VM contains some bookmarks).
 
 Time to code: Kmer counting
----------------------------
+===========================
 Code for this practical is available on github. Clone the repository to get all the projects:
 
 	git clone https://github.com/vmk/NBIC-BioAssist--hands-on-Hadoop
@@ -88,11 +89,66 @@ The repository contains two sections:
 	* kmers_pig - and example kmer counting using pig and a user defined function
 	* biopig - the biopig package for you to experiment with
 	
+All the mr and cascading directories have an eclipse project file present and the VM has a version of eclipse installed - stat it by entering `eclipse` in the terminal.
+You can simply import projects into eclipse via `File -> Import...` and then selecting `General -> Existing projects into workspace`. In addition to the code external libraries are 
+included as well as ant build files. To use the build files select `Window -> Show view -> Ant` in the view that pops up build files can be added by clicking the small plus in the toolbar. Each
+project typicaly has one clean target and one or two jar targets which will produce the desired jarfiles to run on hadoop.
+
+Easing into it: more wordcount
+------------------------------
+First start by studying the wordcount examples from the part1 folder. These are complete programs that you can run on Hadoop. Try to build each of them with the supplied 
+buildfiles and run them on the 'sample.txt' and 'alice.txt' text. Input and output paths need to be specified on the commandline e.g.:
+
+	`hadoop jar wordcount_mr.jar <input hdfs path> <output hdfs path>`
+	
+Note that the paths can include wildcards: in case of multiple files matching the wildcards these will all be streamed through your mappers and reducers. Use the jobtracker web interface to examine your running jobs (bookmarks in browser VM). Once you have tried this
+on the local Hadoop on the VM you can switch to the cluster by issuing the `switch_hadoop` command. Upload one of the txt's to your HDFS home (/user/hadwsXX/ on the cluster) and run the wordcount there. Once you have done this
+issue the `switch_hadoop` command again to switch back to local mode for the next exercise.
+
+Extending wordcount: basecount
+------------------------------
+Alright, time to do some programming of our own: extend the wordcount example so that it now counts letters, or bases in a sequence. Sequence reads from e. coli are provided in
+the '~/Data' directory. Upload this file to your home folder on the local or VM Hadoop instance. For debugging it is probably wise to upload a much smaller sample to test on. Create a 
+smaller version with the following command and upload the resulting smaller file:
+
+	zcat ecoli_ref-5m.fastq.gz | head -n 32 | gzip > ecoli.small.fastq.gz
+	
+Now open either the mapreduce or cascading skeleton code and implement the missing code (see the comments). Once you are satisfied, build a jar file using the build file and run it on the small
+file first. Note that it is not necessary to handle the compression of the files yourself. This is handled by Hadoop for you, but has one drawback: gzip files are not splittable so you will only get assigned one
+mapper per file (this will come up later again in the next exercise). Once the count works on the small file you can try it on the complete file or on data on the hadoop cluster (use switch_hadoop to switch). The cluster data
+is located in the /data/public/sequences directory. There you can find the e. coli data and around 860 million reads of a human genome. Both files are present in the zipped (unsplittable form) or in a splittable form (splittable in the filename). You can see 
+the difference this makes by running basecount on the gzip and splittable version of the e. coli data (we'll leave the human data alone, for now).   
+
+Extending basecount: kmercount
+------------------------------
+Well basecounting is actually kmercounting where k=1. In kmercounting we count all the n-grams or n-tuples of size k in a sequence. Take the sequence:
+	
+	ATTCGA
+
+The kmers for k=3 then equal:
+	
+	ATT
+	 TTC
+	  TCG
+	   CGA
+	   
+Some skeleton code is already provided: implement it so that the code reads in a (set of) reads and produces the kmer as key and count as value. Run it first on the small e. coli data
+on your local VM. Once you are satisfied you can swith to the cluster and run it on all human data (use a wildcard in the path) or even all the data in the sequence directory. Do take note
+to use the splittable version for large runs (or you will be stuck with a single mapper per file which will take quite long). In order to verify your results we implemented a kmer count 
+in pig . You can run it from the kmers_pig folder by issuing the command:
+
+pig -f kmer.pig -param input=<hdfs path>
+
+The kmercounts will be printed to stdout (perhaps best to not do this on the full human data..)
 
 
 Above and beyond: Doing something interesting
 ---------------------------------------------
+kmer profiling, plotting
+genome size estimation
+biopig
 
+Links and references
 
 
 
