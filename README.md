@@ -74,19 +74,19 @@ Time to code: Kmer counting
 ---------------------------
 Code for this practical is available on github. Clone the repository to get all the projects:
 
-'git clone https://github.com/vmk/NBIC-BioAssist--hands-on-Hadoop'
+	git clone https://github.com/vmk/NBIC-BioAssist--hands-on-Hadoop
 
 The repository contains two sections:
 
-	1. part1 - some example wordcount code as inspiration for part2
-		* wordcount_mr - wordcount using the mapreduce api
-		* wordcount_cascading - wordcount using the cascading api
-		* wordcount_pig - wordcount using pig
-	2. part2 - skeleton code to be implemented
-		* kmers_cascading - implement base counting and kmer counting in cascading here
-		* kmers_mr - implement base counting and kmer counting using mapreduce here
-		* kmers_pig - and example kmer counting using pig and a user defined function
-		* biopig - the biopig package for you to experiment with
+1. part1 - some example wordcount code as inspiration for part2
+	* wordcount_mr - wordcount using the mapreduce api
+	* wordcount_cascading - wordcount using the cascading api
+	* wordcount_pig - wordcount using pig
+2. part2 - skeleton code to be implemented
+	* kmers_cascading - implement base counting and kmer counting in cascading here
+	* kmers_mr - implement base counting and kmer counting using mapreduce here
+	* kmers_pig - and example kmer counting using pig and a user defined function
+	* biopig - the biopig package for you to experiment with
 	
 
 
