@@ -98,7 +98,7 @@ The repository contains two sections:
 All the mr and cascading directories have an eclipse project file present and the VM has a version of eclipse installed - start it by entering `eclipse` in the terminal.
 You can simply import projects into eclipse via `File -> Import...` and then selecting `General -> Existing projects into workspace`. In addition to the code external libraries are 
 included as well as ant build files. To use the build files select `Window -> Show view -> Ant` in the view that pops up build files can be added by clicking the small plus in the toolbar. Each
-project typicaly has one clean target and one or two jar targets which will produce the desired jarfiles to run on hadoop. Working code will be commited at the end of the session for reference.
+project typically has one clean target and one or two jar targets which will produce the desired jarfiles to run on hadoop. Working code will be commited at the end of the session for reference.
 
 Easing into it: more wordcount
 ------------------------------
