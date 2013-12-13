@@ -5,8 +5,8 @@ Welcome to the BioAssist Hands-on Hadoop workshop. This session has two objectiv
 * Try out/get to know SURFsara's Hadoop offerings and implement some basic code.
 * Tackle a bioinformatics problem using Hadoop.
 
-Hadoop access and intro: Setting up your environment and running an existing job
-================================================================================
+Hadoop access and first job
+===========================
 
 Before being able to implement and run or debug any code, we need to get access to a Hadoop environment. For this workshop
 we will make use of a virtual machine that is configured both for a standalone Hadoop environment and the SURFsara cluster.
@@ -34,7 +34,7 @@ Cluster authentication uses Kerberos and different account details. You can clai
 
 [https://etherpad.conext.surfnetlabs.nl/p/BioAssist:%20Hands-on%20Hadoop](https://etherpad.conext.surfnetlabs.nl/p/BioAssist:%20Hands-on%20Hadoop)
 
-Initializing Kerberos and authenticating then is a matter of issuing the following command (where user is your hadwsXX name):
+Initializing Kerberos and authenticating is a matter of issuing the following command (where user is your hadwsXX name):
  
 	~$ kinit <user>
 	<user>@ALLEY.SARA.NL's Password: 
@@ -49,13 +49,13 @@ Before we start counting words we will need some input data on HDFS. For this we
 
 [http://archive.cloudera.com/cdh/3/hadoop-0.20.2-cdh3u6/file_system_shell.html](http://archive.cloudera.com/cdh/3/hadoop-0.20.2-cdh3u6/file_system_shell.html)
 
-Browse the home folder on your local hadoop environment: 'hadoop fs -ls /user/user'
+Browse the home folder on your local hadoop environment: `hadoop fs -ls /user/user`
 
 The workshop VM contains some data to use during the session. The '~/Data/' directory contains some text data and some sequencing reads. These need to be uploaded to 
 HDFS: 
 
 1.	Create a folder in HDFS for your input data called 'mapreduce/input'. Notice that you do not have to create the' mapreduce' folder first. This is different on a normal Unix filesystem.
-2.	Upload the data file 'sample.txt' and 'alice.txt' to the input folder. Verify the upload by using the 'hadoop fs -ls' and 'hadoop fs -cat' commands.
+2.	Upload the data file 'sample.txt' and 'alice.txt' to the input folder. Verify the upload by using the `hadoop fs -ls` and `hadoop fs -cat` commands.
 3.	Rename the file to 'mapreduce/input/alice.txt' without uploading it from the local filesystem again.
 4.	Download a file from the HDFS to the local filesystem.
 
@@ -63,12 +63,12 @@ Now you are ready to run an existing example:
 
 You submit a job to the MapReduce framework using the 'hadoop jar' command. You will run an example program shipped with the Hadoop distribution on your input file.
 
-1.	Run 'hadoop jar $HADOOP_HOME/hadoop-examples-0.20.2-cdh3u6.jar '. Read the usage instructions: we are interested in the WordCount example.
+1.	Run `hadoop jar $HADOOP_HOME/hadoop-examples-0.20.2-cdh3u6.jar`. Read the usage instructions: we are interested in the WordCount example.
 2.	Run the WordCount example on the input file you uploaded before. Use 'mapreduce/output/wc-example' as the output path.
 3.	Look at the output generated, especially the Counters of the MapReduce Framework.
-4.	Inspect the output of the program. The results of the reducer(s) are stored in the 'part-N' files. An easy way to look at the output is 'hadoop fs -cat mapreduce/output/wc-example/part-* | less'.
+4.	Inspect the output of the program. The results of the reducer(s) are stored in the 'part-N' files. An easy way to look at the output is `hadoop fs -cat mapreduce/output/wc-example/part-* | less`.
 
-When you run the example again with the same output path Hadoop will refuse to run the job. Remove the output path with 'hadoop fs -rmr' or specify a different one. You can check the
+When you run the example again with the same output path Hadoop will refuse to run the job. Remove the output path with `hadoop fs -rmr` or specify a different one. You can check the
 status of the jobs by pointing your browser to the jobtracker (the browser in the VM contains some bookmarks).
 
 Time to code: Kmer counting
@@ -121,7 +121,7 @@ the difference this makes by running basecount on the gzip and splittable versio
 
 Extending basecount: kmercount
 ------------------------------
-Well basecounting is actually kmercounting where k=1. In kmercounting we count all the n-grams or n-tuples of size k in a sequence. Take the sequence:
+Basecounting is actually kmercounting where k=1. In kmercounting we count all the n-grams or n-tuples of size k in a sequence. Take the sequence:
 	
 	ATTCGA
 
@@ -148,7 +148,7 @@ Having implemented a basic kmercounter we can move on and analyze the sequences 
 1. Try and reproduce the results here [http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/). The human reads on the cluster
 are from subject HG02057 from the 1000 genomes project.
 2. Try to estimate genome size for both e. coli and the human data. 
-3. Play around with biopig - biopig is provide with the code. Please see
+3. Play around with biopig - biopig is provide with the code. Please see:
 
 	[https://github.com/JGI-Bioinformatics/biopig](https://github.com/JGI-Bioinformatics/biopig) 
 	[http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528](http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528).
@@ -160,7 +160,7 @@ Both 1 and 2 will require you to further add code to count how many kmer matches
 
 To estimate genome size, 2, you can calculate the kmer frequency within your read data. Meaning you chop all of the reads you've generated up in to kmers (a kmer of 17 is the most common, as it is long enough to yield fairly specific sequences (meaning that its unlikely the kmer is repeated throughout the genome by chance), but short enough to give you lots of data). You then count the frequency with which each 17-mer represented by your data is found among all of the reads generated and create a frequency histogram of this information. For non-repetitive regions of the genome, this histogram should be normally distributed around a single peak (although in real data you will have a asymptote near 1 because of rare sequencing errors etc). This peak value (or peak depth) is the mean kmer coverage for your data. 
 
-You can relate this value to the actual coverage of your genome using the formula M = N * (L – K + 1) / L, where M is the mean kmer coverage, N is the actual coverage of the genome, L is the mean read length and k is the kmer size.
+You can relate this value to the actual coverage of your genome using the formula M = N * (L – k + 1) / L, where M is the mean kmer coverage, N is the actual coverage of the genome, L is the mean read length and k is the kmer size.
 
 L - k + 1 gives you the number of kmers created per read. 
 
