@@ -115,7 +115,7 @@ smaller version with the following command and upload the resulting smaller file
 	
 Now open either the mapreduce or cascading skeleton code and implement the missing code (see the comments). Once you are satisfied, build a jar file using the build file and run it on the small
 file first. Note that it is not necessary to handle the compression of the files yourself. This is handled by Hadoop for you, but has one drawback: gzip files are not splittable so you will only get assigned one
-mapper per file (this will come up later again in the next exercise). Once the count works on the small file you can try it on the complete file or on data on the hadoop cluster (use switch_hadoop to switch). The cluster data
+mapper per file. Once the count works on the small file you can try it on the complete file or on data on the hadoop cluster (use switch_hadoop to switch). The cluster data
 is located in the /data/public/sequences directory. There you can find the e. coli data and around 860 million reads of a human genome. Both files are present in the zipped (unsplittable form) or in a splittable form (splittable in the filename). You can see 
 the difference this makes by running basecount on the gzip and splittable version of the e. coli data (we'll leave the human data alone, for now).   
 
@@ -132,8 +132,8 @@ The kmers for k=3 then equal:
 	  TCG
 	   CGA
 	   
-Some skeleton code is already provided: implement it so that the code reads in a (set of) reads and produces the kmer as key and count as value. Run it first on the small e. coli data
-on your local VM. Once you are satisfied you can swith to the cluster and run it on all human data (use a wildcard in the path) or even all the data in the sequence directory. Do take note
+Some skeleton code is already provided: implement it so that the code reads in a (set of) reads, a value for k and produces these kmers as key and count as value. Run it first on the small e. coli data
+on your local VM. Once you are satisfied you can switch to the cluster and run it on all human data (use a wildcard in the path) or even all the data in the sequence directory. Do take note
 to use the splittable version for large runs (or you will be stuck with a single mapper per file which will take quite long). In order to verify your results we implemented a kmer count 
 in pig . You can run it from the kmers_pig folder by issuing the command:
 
@@ -141,14 +141,36 @@ pig -f kmer.pig -param input=<hdfs path>
 
 The kmercounts will be printed to stdout (perhaps best to not do this on the full human data..)
 
-
 Above and beyond: Doing something interesting
----------------------------------------------
-kmer profiling, plotting
-genome size estimation
-biopig
+=============================================
+Having implemented a basic kmercounter we can move and analyze the sequences in more detail. Here are some things you could try (this will probably require additional map and reduce steps for you to implement/or more pipes in cascading):
 
-Links and references
+1. try and reproduce the results here [http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/](http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3680041/table/T1/). The human reads on the cluster
+are from subject HG02057 from the 1000 genomes project.
+2. try to estimate genome size for both e. coli and the human data. 
+3. Play around with biopig - biopig is provide with the code. Please see [https://github.com/JGI-Bioinformatics/biopig](https://github.com/JGI-Bioinformatics/biopig) and [http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528](http://bioinformatics.oxfordjournals.org/content/early/2013/09/10/bioinformatics.btt528).
+
+--------------------
+Both 1 and 2 will require you to further add code to count how many kmer matches exist genomewide (i.e. bin kmers who exist once and count these; bin k-mers with frequency 2 and count these etc.) - a good reference that explains this (and a good blog overall):
+
+[http://www.homolog.us/blogs/blog/2011/09/20/maximizing-utility-of-available-rams-in-k-mer-world/](http://www.homolog.us/blogs/blog/2011/09/20/maximizing-utility-of-available-rams-in-k-mer-world/)
+
+To estimate genome size, 2, you can calculate the kmer frequency within your read data. Meaning you chop all of the reads you've generated up in to kmers (a kmer of 17 is the most common, as it is long enough to yield fairly specific sequences (meaning that its unlikely the kmer is repeated throughout the genome by chance), but short enough to give you lots of data). You then count the frequency with which each 17-mer represented by your data is found among all of the reads generated and create a frequency histogram of this information. For non-repetitive regions of the genome, this histogram should be normally distributed around a single peak (although in real data you will have a asymptote near 1 because of rare sequencing errors etc). This peak value (or peak depth) is the mean kmer coverage for your data. 
+
+You can relate this value to the actual coverage of your genome using the formula M = N * (L – K + 1) / L, where M is the mean kmer coverage, N is the actual coverage of the genome, L is the mean read length and k is the kmer size.
+
+L - k + 1 gives you the number of kmers created per read. 
+
+So basically what the formula says is the kmer coverage for a genome is equal to the mean read coverage * the number of kmers per read divided by the read length.
+
+Because you know L (your mean read length) and k (the kmer you used to estimate peak kmer coverage) and you've calculated M (soapdenovo comes with a script called kmerfreq that will this), you simply solve the equation for N as:
+
+N = M / (( L - k + 1 )/ L ) and calculate N.
+
+Once you have that, divide your total sequence data by N and you have your genome estimate.
+
+
+
 
 
 
