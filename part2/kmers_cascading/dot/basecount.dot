@@ -1,0 +1,17 @@
+digraph G {
+  1 [label = "Every('filter')[Sum[decl:'sum'][args:1]]"];
+  2 [label = "Hfs['TextLine[['offset', 'line']->[ALL]]']['/user/mathijsk/kmers/t5']']"];
+  3 [label = "GroupBy('filter')[by:['base']]"];
+  4 [label = "Each('filter')[BaseSplitter[decl:'base', 'count'][args:2]]"];
+  5 [label = "Each('filter')[SequenceLineFilter[decl:'offset', 'line'][args:2]]"];
+  6 [label = "Hfs['TextLine[['offset', 'line']->[ALL]]']['/user/mathijsk/ecoli_ref-5m.fastq.gz']']"];
+  7 [label = "[head]"];
+  8 [label = "[tail]"];
+  1 -> 2 [label = "[{2}:'base', 'sum']\n[{2}:'base', 'count']"];
+  6 -> 5 [label = "[{2}:'offset', 'line']\n[{2}:'offset', 'line']"];
+  5 -> 4 [label = "[{2}:'offset', 'line']\n[{2}:'offset', 'line']"];
+  4 -> 3 [label = "[{2}:'base', 'count']\n[{2}:'base', 'count']"];
+  3 -> 1 [label = "filter[{1}:'base']\n[{2}:'base', 'count']"];
+  7 -> 6 [label = ""];
+  2 -> 8 [label = "[{2}:'base', 'sum']\n[{2}:'base', 'sum']"];
+}
