@@ -34,7 +34,7 @@ The image has been configured with a single user:
 username: user
 password: hadoop
 
-By default hadoop is configured to connect to the hadoop environment on the localhost. In order to switch to cluster usage 
+By default the VM is configured to connect to the hadoop environment on the localhost. In order to switch to cluster usage 
 you can use the switch_hadoop script to toggle between configurations. In order to use the cluster you will first need to authenticate against the cluster.
 Cluster authentication uses Kerberos and different account details. You can claim a user and password for the Hadoop cluster here (just add your name and/or e-mailaddress after the acount):
 
