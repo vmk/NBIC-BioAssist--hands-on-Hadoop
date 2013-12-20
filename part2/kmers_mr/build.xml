@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="kmers_cascading" default="jar_basecount" basedir=".">
+<project name="kmers_mr" default="jar_basecount" basedir=".">
     <echo>Running build for kmers_mr:</echo>
     <echo>Setting up build properties...</echo>
 
@@ -13,11 +13,11 @@
         <path id="dist.classpath">
             <fileset dir="${lib.dir}" includes="**/*.jar, **/*.zip" />
         </path>
-        <manifestclasspath property="dist.manifest.classpath" jarfile="${basedir}/kmers_cascading_basecount.jar">
+        <manifestclasspath property="dist.manifest.classpath" jarfile="${basedir}/kmers_mr_basecount.jar">
             <classpath refid="dist.classpath" />
         </manifestclasspath>
 
-        <jar destfile="${basedir}/kmers_cascading_basecount.jar" compress="true">
+        <jar destfile="${basedir}/kmers_mr_basecount.jar" compress="true">
             <fileset dir="${bin.dir}" includes="**/*.*" />
             <zipfileset dir="${lib.dir}" prefix="lib/" /> <!--includes="**/*.jar, **/*.zip" /> -->
             <manifest>
@@ -33,15 +33,55 @@
         <path id="dist.classpath">
             <fileset dir="${lib.dir}" includes="**/*.jar, **/*.zip" />
         </path>
-        <manifestclasspath property="dist.manifest.classpath" jarfile="${basedir}/kmers_cascading_kmercount.jar">
+        <manifestclasspath property="dist.manifest.classpath" jarfile="${basedir}/kmers_mr_kmercount.jar">
             <classpath refid="dist.classpath" />
         </manifestclasspath>
 
-        <jar destfile="${basedir}/kmers_cascading_kmercount.jar" compress="true">
+        <jar destfile="${basedir}/kmers_mr_kmercount.jar" compress="true">
             <fileset dir="${bin.dir}" includes="**/*.*" />
             <zipfileset dir="${lib.dir}" prefix="lib/" /> <!--includes="**/*.jar, **/*.zip" /> -->
             <manifest>
                 <attribute name="Main-Class" value="nl.surfsara.hadoop.mr.kmercount.KmerCount" />
+                <attribute name="Class-Path" value="${dist.manifest.classpath}" />
+            </manifest>
+        </jar>
+    </target>
+	
+    <!-- Create jar from compiled sources  -->
+    <target name="jar_basecount_solution">
+        <echo>Creating basecount jar...</echo>
+        <path id="dist.classpath">
+            <fileset dir="${lib.dir}" includes="**/*.jar, **/*.zip" />
+        </path>
+        <manifestclasspath property="dist.manifest.classpath" jarfile="${basedir}/kmers_mr_basecount.jar">
+            <classpath refid="dist.classpath" />
+        </manifestclasspath>
+
+        <jar destfile="${basedir}/kmers_mr_basecount.jar" compress="true">
+            <fileset dir="${bin.dir}" includes="**/*.*" />
+            <zipfileset dir="${lib.dir}" prefix="lib/" /> <!--includes="**/*.jar, **/*.zip" /> -->
+            <manifest>
+                <attribute name="Main-Class" value="nl.surfsara.hadoop.mr.solution.basecount.BaseCount" />
+                <attribute name="Class-Path" value="${dist.manifest.classpath}" />
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Create jar from compiled sources  -->
+    <target name="jar_kmercount_solution">
+        <echo>Creating kmercount jar...</echo>
+        <path id="dist.classpath">
+            <fileset dir="${lib.dir}" includes="**/*.jar, **/*.zip" />
+        </path>
+        <manifestclasspath property="dist.manifest.classpath" jarfile="${basedir}/kmers_mr_kmercount.jar">
+            <classpath refid="dist.classpath" />
+        </manifestclasspath>
+
+        <jar destfile="${basedir}/kmers_mr_kmercount.jar" compress="true">
+            <fileset dir="${bin.dir}" includes="**/*.*" />
+            <zipfileset dir="${lib.dir}" prefix="lib/" /> <!--includes="**/*.jar, **/*.zip" /> -->
+            <manifest>
+                <attribute name="Main-Class" value="nl.surfsara.hadoop.mr.solution.kmercount.KmerCount" />
                 <attribute name="Class-Path" value="${dist.manifest.classpath}" />
             </manifest>
         </jar>
