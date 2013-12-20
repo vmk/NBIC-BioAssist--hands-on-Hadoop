@@ -36,9 +36,7 @@ password: hadoop
 
 By default the VM is configured to connect to the hadoop environment on the localhost. In order to switch to cluster usage 
 you can use the switch_hadoop script to toggle between configurations. In order to use the cluster you will first need to authenticate against the cluster.
-Cluster authentication uses Kerberos and different account details. You can claim a user and password for the Hadoop cluster here (just add your name and/or e-mailaddress after the acount):
-
-[https://etherpad.conext.surfnetlabs.nl/p/BioAssist:%20Hands-on%20Hadoop](https://etherpad.conext.surfnetlabs.nl/p/BioAssist:%20Hands-on%20Hadoop)
+Cluster authentication uses Kerberos and different account details. Please contact us at hadoop.support@surfsara.nl if you want to try this on the SURFsara Hadoop cluster.
 
 Initializing Kerberos and authenticating is a matter of issuing the following command (where user is your hadwsXX name):
  
